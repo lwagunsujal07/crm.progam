@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>넥서스 CRM Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg0:#0d0f14;
+  --bg1:#13161e;
+  --bg2:#1a1e28;
+  --bg3:#212638;
+  --bg4:#2a3048;
+  --accent:#4f8ef7;
+  --accent2:#7c5cbf;
+  --accent3:#2ec4a0;
+  --accent4:#f4a83a;
+  --accent5:#e85d75;
+  --text1:#eef0f8;
+  --text2:#9ba3c0;
+  --text3:#5c6380;
+  --border:#252a3a;
+  --border2:#2e3550;
+  --radius:10px;
+  --radius2:16px;
+  --shadow:0 4px 24px rgba(0,0,0,0.4);
+}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg0);color:var(--text1);font-size:13px;overflow:hidden;height:100vh}
+#app{display:flex;height:100vh}
+
+/* SIDEBAR */
+#sidebar{width:220px;background:var(--bg1);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;transition:width .2s}
+.logo-wrap{padding:20px 18px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.logo-icon{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0}
+.logo-text{font-size:15px;font-weight:700;letter-spacing:-.3px}
+.logo-badge{font-size:9px;font-weight:700;background:var(--accent);color:#fff;padding:1px 5px;border-radius:4px;margin-left:4px;vertical-align:middle}
+nav{flex:1;padding:10px 10px;overflow-y:auto}
+.nav-section{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;padding:10px 8px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--radius);cursor:pointer;color:var(--text2);font-size:13px;margin-bottom:2px;transition:all .15s;position:relative}
+.nav-item:hover{background:var(--bg2);color:var(--text1)}
+.nav-item.active{background:rgba(79,142,247,.12);color:var(--accent);font-weight:500}
+.nav-item.active::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:3px;background:var(--accent);border-radius:0 3px 3px 0}
+.nav-icon{width:20px;text-align:center;font-size:14px;flex-shrink:0}
+.nav-badge{margin-left:auto;background:var(--accent5);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px}
+.nav-badge.green{background:var(--accent3)}
+.sidebar-footer{padding:14px;border-top:1px solid var(--border)}
+.user-card{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--radius);background:var(--bg2);cursor:pointer}
+.user-card:hover{background:var(--bg3)}
+.user-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#4f8ef7,#7c5cbf);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.user-name{font-size:12px;font-weight:600}
+.user-role{font-size:11px;color:var(--text3)}
+.user-dot{width:7px;height:7px;border-radius:50%;background:var(--accent3);margin-left:auto;flex-shrink:0}
+
+/* MAIN */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+#topbar{height:56px;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 22px;gap:14px;background:var(--bg1);flex-shrink:0}
+#topbar h1{font-size:17px;font-weight:700;flex:1;letter-spacing:-.3px}
+.search-wrap{position:relative;display:flex;align-items:center}
+.search-wrap input{background:var(--bg2);border:1px solid var(--border2);color:var(--text1);border-radius:var(--radius);padding:7px 12px 7px 34px;font-size:13px;outline:none;width:220px;font-family:inherit;transition:border .15s}
+.search-wrap input:focus{border-color:var(--accent)}
+.search-wrap input::placeholder{color:var(--text3)}
+.search-icon{position:absolute;left:10px;color:var(--text3);font-size:13px}
+.topbar-btns{display:flex;gap:8px;align-items:center}
+.icon-btn{width:34px;height:34px;border-radius:var(--radius);border:1px solid var(--border2);background:var(--bg2);color:var(--text2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;transition:all .15s;position:relative}
+.icon-btn:hover{background:var(--bg3);color:var(--text1)}
+.notif-dot{position:absolute;top:5px;right:5px;width:6px;height:6px;border-radius:50%;background:var(--accent5)}
+.btn{padding:7px 16px;border-radius:var(--radius);border:1px solid var(--border2);background:var(--bg2);cursor:pointer;font-size:13px;font-weight:500;color:var(--text1);transition:all .15s;font-family:inherit}
+.btn:hover{background:var(--bg3)}
+.btn-accent{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-accent:hover{background:#3a7ae8;border-color:#3a7ae8}
+#content{flex:1;overflow-y:auto;padding:22px;background:var(--bg0)}
+.section{display:none;animation:fadeIn .2s ease}
+.section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:20px}
+.stat-card{background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius2);padding:16px;position:relative;overflow:hidden;transition:border-color .2s}
+.stat-card:hover{border-color:var(--border2)}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.stat-card.c1::before{background:var(--accent)}
+.stat-card.c2::before{background:var(--accent3)}
+.stat-card.c3::before{background:var(--accent4)}
+.stat-card.c4::before{background:var(--accent2)}
+.stat-card.c5::before{background:var(--accent5)}
+.stat-icon{font-size:18px;margin-bottom:10px}
+.stat-label{font-size:11px;color:var(--text3);font-weight:500;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.stat-val{font-size:26px;font-weight:700;letter-spacing:-.5px}
+.stat-sub{font-size:11px;margin-top:4px}
+.stat-up{color:var(--accent3)}
+.stat-dn{color:var(--accent5)}
+
+/* CARDS */
+.card{background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius2);padding:18px;margin-bottom:16px}
+.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.card-title{font-size:14px;font-weight:700;letter-spacing:-.2px}
+.card-sub{font-size:12px;color:var(--text3);margin-top:2px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;padding:0 0 10px;border-bottom:1px solid var(--border)}
+td{padding:12px 0;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tbody tr{cursor:pointer;transition:background .1s}
+tbody tr:hover td{background:rgba(255,255,255,.02)}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;gap:4px}
+.badge::before{content:'';width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.b-green{background:rgba(46,196,160,.15);color:#2ec4a0}.b-green::before{background:#2ec4a0}
+.b-blue{background:rgba(79,142,247,.15);color:#4f8ef7}.b-blue::before{background:#4f8ef7}
+.b-amber{background:rgba(244,168,58,.15);color:#f4a83a}.b-amber::before{background:#f4a83a}
+.b-red{background:rgba(232,93,117,.15);color:#e85d75}.b-red::before{background:#e85d75}
+.b-purple{background:rgba(124,92,191,.15);color:#a07fe8}.b-purple::before{background:#a07fe8}
+.b-gray{background:rgba(155,163,192,.1);color:#9ba3c0}.b-gray::before{background:#9ba3c0}
+
+/* PIPELINE */
+.pipeline-wrap{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.p-col{background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius2);padding:14px;min-height:300px}
+.p-col-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.p-col-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text2)}
+.p-col-count{background:var(--bg3);color:var(--text2);font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px}
+.p-col-line{height:2px;border-radius:2px;margin-bottom:12px}
+.deal-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:12px;margin-bottom:8px;cursor:pointer;transition:all .15s}
+.deal-card:hover{border-color:var(--border2);background:var(--bg3);transform:translateY(-1px)}
+.deal-name{font-size:13px;font-weight:600;margin-bottom:3px}
+.deal-co{font-size:11px;color:var(--text3)}
+.deal-val{font-size:12px;font-weight:700;color:var(--accent);margin-top:8px}
+.deal-foot{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+.deal-prob{font-size:10px;color:var(--text3)}
+.deal-bar{height:3px;background:var(--bg4);border-radius:2px;margin-top:4px}
+.deal-bar-fill{height:3px;border-radius:2px;transition:width .3s}
+
+/* ACTIVITY */
+.activity-list{display:flex;flex-direction:column;gap:0}
+.act-item{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--border)}
+.act-item:last-child{border-bottom:none}
+.act-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.act-body{flex:1}
+.act-text{font-size:13px;line-height:1.5}
+.act-meta{font-size:11px;color:var(--text3);margin-top:3px}
+.act-tag{display:inline-block;padding:1px 7px;border-radius:4px;font-size:10px;font-weight:600;margin-right:6px}
+
+/* DETAIL PANEL */
+#detail-panel{position:fixed;right:0;top:0;height:100vh;width:400px;background:var(--bg1);border-left:1px solid var(--border);padding:0;overflow:hidden;transform:translateX(100%);transition:transform .25s cubic-bezier(.4,0,.2,1);z-index:100;box-shadow:-8px 0 32px rgba(0,0,0,.5);display:flex;flex-direction:column}
+#detail-panel.open{transform:translateX(0)}
+.dp-header{padding:20px 22px 16px;border-bottom:1px solid var(--border);flex-shrink:0}
+.dp-close{cursor:pointer;color:var(--text3);font-size:18px;float:right;line-height:1;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:6px;transition:all .15s}
+.dp-close:hover{background:var(--bg3);color:var(--text1)}
+.dp-body{flex:1;overflow-y:auto;padding:20px 22px}
+.dp-name{font-size:20px;font-weight:700;margin:12px 0 4px;letter-spacing:-.3px}
+.dp-sub{font-size:13px;color:var(--text3)}
+.dp-section{margin-bottom:20px}
+.dp-section-title{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.dp-section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.dp-field{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--border);gap:12px;font-size:13px}
+.dp-field:last-child{border-bottom:none}
+.dp-field-label{color:var(--text3);flex-shrink:0;font-size:12px}
+.dp-field-val{text-align:right;word-break:break-all}
+.dp-actions{padding:16px 22px;border-top:1px solid var(--border);display:flex;gap:10px;flex-shrink:0}
+.init-circle{width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+
+/* MODAL */
+#modal-wrap{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center}
+#modal-wrap.show{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius2);padding:26px;width:500px;max-width:95vw;box-shadow:0 20px 60px rgba(0,0,0,.6);animation:modalIn .2s ease}
+@keyframes modalIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:20px;letter-spacing:-.3px}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-row{margin-bottom:0}
+.form-row.full{grid-column:1/-1}
+.form-label{font-size:11px;color:var(--text3);margin-bottom:5px;display:block;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.form-input{width:100%;padding:9px 12px;border:1px solid var(--border2);border-radius:var(--radius);background:var(--bg3);color:var(--text1);font-size:13px;outline:none;font-family:inherit;transition:border .15s}
+.form-input:focus{border-color:var(--accent)}
+.form-input::placeholder{color:var(--text3)}
+select.form-input{cursor:pointer}
+textarea.form-input{resize:vertical;min-height:70px}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
+
+/* TASKS */
+.task-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.task-item:last-child{border-bottom:none}
+.task-cb{width:18px;height:18px;border-radius:5px;border:2px solid var(--border2);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.task-cb.done{background:var(--accent3);border-color:var(--accent3)}
+.task-text{flex:1;font-size:13px}
+.task-text.done{text-decoration:line-through;color:var(--text3)}
+.task-due{font-size:11px;color:var(--text3);flex-shrink:0}
+.task-due.overdue{color:var(--accent5)}
+
+/* CHART BARS */
+.bar-chart{display:flex;gap:8px;align-items:flex-end;height:100px;margin-top:12px}
+.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bar{width:100%;border-radius:4px 4px 0 0;transition:height .4s ease;cursor:pointer;min-height:4px}
+.bar:hover{filter:brightness(1.2)}
+.bar-label{font-size:10px;color:var(--text3);text-align:center}
+.bar-val{font-size:10px;font-weight:700;text-align:center}
+
+/* DONUT */
+.donut-wrap{display:flex;align-items:center;gap:20px}
+.donut-legend{display:flex;flex-direction:column;gap:8px}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:12px}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* PROGRESS BAR */
+.prog-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.prog-label{font-size:12px;color:var(--text2);width:80px;flex-shrink:0}
+.prog-bar{flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.prog-fill{height:6px;border-radius:3px;transition:width .5s ease}
+.prog-pct{font-size:11px;color:var(--text3);width:32px;text-align:right;flex-shrink:0}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--border2)}
+
+/* TABS */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:16px}
+.tab{padding:8px 16px;cursor:pointer;font-size:13px;color:var(--text3);border-bottom:2px solid transparent;transition:all .15s;margin-bottom:-1px}
+.tab:hover{color:var(--text1)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+
+/* FILTER BAR */
+.filter-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.filter-bar input,.filter-bar select{background:var(--bg2);border:1px solid var(--border2);color:var(--text1);border-radius:var(--radius);padding:7px 12px;font-size:13px;outline:none;font-family:inherit;transition:border .15s}
+.filter-bar input:focus,.filter-bar select:focus{border-color:var(--accent)}
+.filter-bar input{flex:1;min-width:160px}
+.filter-bar input::placeholder{color:var(--text3)}
+
+/* MINI BADGE */
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;background:var(--bg3);color:var(--text2);margin:2px}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="sidebar">
+    <div class="logo-wrap">
+      <div class="logo-icon">N</div>
+      <div>
+        <span class="logo-text">넥서스 CRM</span><span class="logo-badge">PRO</span>
+      </div>
+    </div>
+    <nav>
+      <div class="nav-section">메인 메뉴</div>
+      <div class="nav-item active" onclick="navTo('dashboard',this)"><span class="nav-icon">📊</span>대시보드</div>
+      <div class="nav-item" onclick="navTo('contacts',this)"><span class="nav-icon">👥</span>연락처</div>
+      <div class="nav-item" onclick="navTo('pipeline',this)"><span class="nav-icon">🔀</span>파이프라인</div>
+      <div class="nav-item" onclick="navTo('companies',this)"><span class="nav-icon">🏢</span>기업</div>
+      <div class="nav-section">도구</div>
+      <div class="nav-item" onclick="navTo('tasks',this)"><span class="nav-icon">✅</span>할 일<span class="nav-badge" id="task-badge">0</span></div>
+      <div class="nav-item" onclick="navTo('reports',this)"><span class="nav-icon">📈</span>리포트</div>
+      <div class="nav-item" onclick="navTo('activity',this)"><span class="nav-icon">🕐</span>활동 로그</div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-card">
+        <div class="user-av">김</div>
+        <div>
+          <div class="user-name">김민준</div>
+          <div class="user-role">영업 팀장</div>
+        </div>
+        <div class="user-dot"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="main">
+    <div id="topbar">
+      <h1 id="page-title">대시보드</h1>
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="연락처, 기업, 딜 검색..." id="global-search" oninput="globalSearch(this.value)"/>
+      </div>
+      <div class="topbar-btns">
+        <div class="icon-btn" title="알림">🔔<div class="notif-dot"></div></div>
+        <div class="icon-btn" title="설정">⚙️</div>
+        <button class="btn btn-accent" onclick="openAddModal()">+ 새로 추가</button>
+      </div>
+    </div>
+
+    <div id="content">
+
+      <!-- 대시보드 -->
+      <div id="sec-dashboard" class="section active">
+        <div class="stats-grid">
+          <div class="stat-card c1"><div class="stat-icon">👥</div><div class="stat-label">전체 연락처</div><div class="stat-val" id="s-contacts">0</div><div class="stat-sub stat-up">↑ 이번 달 +12%</div></div>
+          <div class="stat-card c2"><div class="stat-icon">💰</div><div class="stat-label">파이프라인 가치</div><div class="stat-val" id="s-value">₩0</div><div class="stat-sub stat-up">↑ +8.3%</div></div>
+          <div class="stat-card c3"><div class="stat-icon">🎯</div><div class="stat-label">이번 달 목표</div><div class="stat-val" id="s-quota">67%</div><div class="stat-sub">목표 ₩5억</div></div>
+          <div class="stat-card c4"><div class="stat-icon">🏆</div><div class="stat-label">성사된 딜</div><div class="stat-val" id="s-won">0</div><div class="stat-sub stat-up">↑ 전월 대비 +3</div></div>
+          <div class="stat-card c5"><div class="stat-icon">📋</div><div class="stat-label">미완료 할 일</div><div class="stat-val" id="s-tasks">0</div><div class="stat-sub stat-dn">기한 초과 2건</div></div>
+        </div>
+        <div class="grid2">
+          <div class="card">
+            <div class="card-head"><div><div class="card-title">월별 매출 현황</div><div class="card-sub">최근 6개월</div></div></div>
+            <div class="bar-chart" id="monthly-chart"></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><div><div class="card-title">파이프라인 단계별</div></div></div>
+            <div id="stage-chart" style="margin-top:8px"></div>
+          </div>
+        </div>
+        <div class="grid2">
+          <div class="card">
+            <div class="card-head"><span class="card-title">최근 연락처</span><button class="btn" onclick="navTo('contacts')" style="font-size:12px;padding:5px 12px;">전체 보기</button></div>
+            <div id="dash-contacts"></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><span class="card-title">최근 활동</span></div>
+            <div class="activity-list" id="dash-activity"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 연락처 -->
+      <div id="sec-contacts" class="section">
+        <div class="filter-bar">
+          <input type="text" placeholder="이름, 이메일, 회사 검색..." id="contact-search" oninput="renderContacts()"/>
+          <select id="contact-status" onchange="renderContacts()"><option value="">전체 상태</option><option>잠재고객</option><option>가망고객</option><option>고객</option><option>이탈</option></select>
+          <select id="contact-sort" onchange="renderContacts()"><option value="name">이름순</option><option value="date">최근 연락순</option><option value="company">회사순</option></select>
+          <button class="btn btn-accent" onclick="openAddModal('contact')">+ 연락처 추가</button>
+        </div>
+        <div class="card">
+          <table>
+            <thead><tr><th>이름</th><th>회사</th><th>이메일</th><th>전화번호</th><th>상태</th><th>최근 연락</th><th>점수</th></tr></thead>
+            <tbody id="contacts-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 파이프라인 -->
+      <div id="sec-pipeline" class="section">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <div style="font-size:13px;color:var(--text3)">딜 카드를 클릭하면 상세 정보와 단계 변경이 가능합니다</div>
+          <button class="btn btn-accent" onclick="openAddModal('deal')">+ 딜 추가</button>
+        </div>
+        <div class="pipeline-wrap" id="pipeline-board"></div>
+      </div>
+
+      <!-- 기업 -->
+      <div id="sec-companies" class="section">
+        <div class="filter-bar">
+          <input type="text" placeholder="기업명, 산업 검색..." id="company-search" oninput="renderCompanies()"/>
+          <select id="company-industry" onchange="renderCompanies()"><option value="">전체 산업</option><option>SaaS</option><option>이커머스</option><option>제조업</option><option>금융</option><option>헬스케어</option><option>미디어</option></select>
+          <button class="btn btn-accent" onclick="openAddModal('company')">+ 기업 추가</button>
+        </div>
+        <div class="card">
+          <table>
+            <thead><tr><th>기업명</th><th>산업</th><th>규모</th><th>연락처 수</th><th>딜 수</th><th>총 가치</th><th>담당자</th></tr></thead>
+            <tbody id="companies-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 할 일 -->
+      <div id="sec-tasks" class="section">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <div class="tabs">
+            <div class="tab active" onclick="filterTasks('all',this)">전체</div>
+            <div class="tab" onclick="filterTasks('today',this)">오늘</div>
+            <div class="tab" onclick="filterTasks('pending',this)">진행중</div>
+            <div class="tab" onclick="filterTasks('done',this)">완료</div>
+          </div>
+          <button class="btn btn-accent" onclick="openAddModal('task')">+ 할 일 추가</button>
+        </div>
+        <div class="card">
+          <div id="task-list"></div>
+        </div>
+      </div>
+
+      <!-- 리포트 -->
+      <div id="sec-reports" class="section">
+        <div class="grid3" style="margin-bottom:16px">
+          <div class="stat-card c1"><div class="stat-label">이번 분기 매출</div><div class="stat-val">₩3.2억</div><div class="stat-sub stat-up">↑ 목표 대비 +12%</div></div>
+          <div class="stat-card c2"><div class="stat-label">평균 딜 사이클</div><div class="stat-val">34일</div><div class="stat-sub stat-up">↓ 전월 대비 -6일</div></div>
+          <div class="stat-card c3"><div class="stat-label">전환율</div><div class="stat-val">28%</div><div class="stat-sub stat-up">↑ +4.2%p</div></div>
+        </div>
+        <div class="grid2">
+          <div class="card">
+            <div class="card-head"><span class="card-title">산업별 파이프라인 분포</span></div>
+            <div id="industry-chart" style="margin-top:8px"></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><span class="card-title">영업 담당자 성과</span></div>
+            <div id="rep-chart" style="margin-top:8px"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">주간 딜 성사 현황</span></div>
+          <div class="bar-chart" id="weekly-chart"></div>
+        </div>
+      </div>
+
+      <!-- 활동 로그 -->
+      <div id="sec-activity" class="section">
+        <div class="filter-bar" style="margin-bottom:16px">
+          <select id="act-type" onchange="renderActivity()"><option value="">전체 유형</option><option>통화</option><option>이메일</option><option>미팅</option><option>메모</option><option>딜</option></select>
+        </div>
+        <div class="card">
+          <div class="activity-list" id="all-activity"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL PANEL -->
+<div id="detail-panel">
+  <div class="dp-header">
+    <span class="dp-close" onclick="closeDetail()">✕</span>
+    <div id="dp-top"></div>
+  </div>
+  <div class="dp-body" id="detail-content"></div>
+  <div class="dp-actions" id="dp-actions"></div>
+</div>
+
+<!-- MODAL -->
+<div id="modal-wrap">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">새로 추가</div>
+    <div class="modal-grid" id="modal-body"></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal()">취소</button>
+      <button class="btn btn-accent" onclick="saveModal()">저장</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const STAGES=['잠재','검증','제안','협상','성사'];
+const STAGE_COLORS=['#9ba3c0','#4f8ef7','#f4a83a','#a07fe8','#2ec4a0'];
+const STAGE_BADGE=['b-gray','b-blue','b-amber','b-purple','b-green'];
+const STATUS_BADGE={'잠재고객':'b-gray','가망고객':'b-blue','고객':'b-green','이탈':'b-red'};
+const ACT_ICONS={'통화':'📞','이메일':'📧','미팅':'🤝','메모':'📝','딜':'💼','연락처':'👤','기업':'🏢','할일':'✅'};
+const ACT_COLORS={'통화':'rgba(79,142,247,.15)','이메일':'rgba(46,196,160,.15)','미팅':'rgba(244,168,58,.15)','메모':'rgba(124,92,191,.15)','딜':'rgba(232,93,117,.15)','연락처':'rgba(79,142,247,.15)','기업':'rgba(46,196,160,.15)','할일':'rgba(244,168,58,.15)'};
+const BG=['#4f8ef7','#2ec4a0','#f4a83a','#e85d75','#a07fe8','#4fc4f7','#f77c4f'];
+const MONTHS=['1월','2월','3월','4월','5월','6월'];
+const MONTHLY_DATA=[1.2,1.8,1.4,2.1,1.9,2.6];
+
+let state={
+  contacts:[
+    {id:1,name:'이지수',email:'jisoo.lee@nexusco.kr',phone:'010-1234-5678',company:'넥서스코리아',status:'고객',lastContact:'2026-03-25',notes:'주요 의사결정자, 이메일 선호',score:92,tags:['VIP','재계약']},
+    {id:2,name:'박민호',email:'minho@brightwave.kr',phone:'010-2345-6789',company:'브라이트웨이브',status:'가망고객',lastContact:'2026-03-22',notes:'엔터프라이즈 플랜 관심',score:78,tags:['핫리드']},
+    {id:3,name:'김서연',email:'seoyeon@orbitdata.kr',phone:'010-3456-7890',company:'오빗데이터',status:'잠재고객',lastContact:'2026-03-20',notes:'SaaStr 컨퍼런스에서 만남',score:55,tags:[]},
+    {id:4,name:'최준혁',email:'junhyuk@clearpath.ai',phone:'010-4567-8901',company:'클리어패스AI',status:'고객',lastContact:'2026-03-18',notes:'6월 갱신 예정',score:88,tags:['재계약']},
+    {id:5,name:'정다은',email:'daeun@cloudpeak.kr',phone:'010-5678-9012',company:'클라우드피크',status:'가망고객',lastContact:'2026-03-15',notes:'기술 평가 진행 중',score:71,tags:['평가중']},
+    {id:6,name:'한승원',email:'seungwon@vortex.kr',phone:'010-6789-0123',company:'보텍스테크',status:'잠재고객',lastContact:'2026-03-10',notes:'최준혁 고객 소개',score:42,tags:[]},
+    {id:7,name:'오미래',email:'mirae@futurelab.kr',phone:'010-7890-1234',company:'퓨처랩',status:'고객',lastContact:'2026-03-28',notes:'프리미엄 플랜 사용 중',score:95,tags:['VIP']},
+  ],
+  companies:[
+    {id:1,name:'넥서스코리아',industry:'SaaS',size:'대기업',website:'nexusco.kr',owner:'김민준'},
+    {id:2,name:'브라이트웨이브',industry:'미디어',size:'중견기업',website:'brightwave.kr',owner:'이영희'},
+    {id:3,name:'오빗데이터',industry:'SaaS',size:'스타트업',website:'orbitdata.kr',owner:'김민준'},
+    {id:4,name:'클리어패스AI',industry:'헬스케어',size:'중견기업',website:'clearpath.ai',owner:'박철수'},
+    {id:5,name:'클라우드피크',industry:'제조업',size:'대기업',website:'cloudpeak.kr',owner:'이영희'},
+    {id:6,name:'보텍스테크',industry:'금융',size:'스타트업',website:'vortex.kr',owner:'김민준'},
+    {id:7,name:'퓨처랩',industry:'이커머스',size:'중견기업',website:'futurelab.kr',owner:'박철수'},
+  ],
+  deals:[
+    {id:1,name:'엔터프라이즈 업그레이드',contact:'이지수',company:'넥서스코리아',value:85000000,stage:'성사',closeDate:'2026-03-01',prob:100},
+    {id:2,name:'연간 구독 계약',contact:'박민호',company:'브라이트웨이브',value:36000000,stage:'제안',closeDate:'2026-04-15',prob:60},
+    {id:3,name:'플랫폼 트라이얼',contact:'김서연',company:'오빗데이터',value:15000000,stage:'잠재',closeDate:'2026-05-01',prob:20},
+    {id:4,name:'Q2 갱신',contact:'최준혁',company:'클리어패스AI',value:110000000,stage:'검증',closeDate:'2026-06-30',prob:75},
+    {id:5,name:'스타터 패키지',contact:'정다은',company:'클라우드피크',value:24000000,stage:'협상',closeDate:'2026-04-30',prob:85},
+    {id:6,name:'파일럿 프로그램',contact:'한승원',company:'보텍스테크',value:12000000,stage:'잠재',closeDate:'2026-05-15',prob:15},
+    {id:7,name:'프리미엄 갱신',contact:'오미래',company:'퓨처랩',value:48000000,stage:'검증',closeDate:'2026-04-10',prob:80},
+  ],
+  tasks:[
+    {id:1,text:'이지수 고객 갱신 미팅 준비',done:false,due:'2026-03-29',contact:'이지수',priority:'높음'},
+    {id:2,text:'브라이트웨이브 제안서 발송',done:false,due:'2026-03-30',contact:'박민호',priority:'높음'},
+    {id:3,text:'오빗데이터 팔로업 이메일',done:true,due:'2026-03-20',contact:'김서연',priority:'보통'},
+    {id:4,text:'클리어패스 기술 문서 검토',done:false,due:'2026-04-02',contact:'최준혁',priority:'보통'},
+    {id:5,text:'Q1 실적 리포트 작성',done:false,due:'2026-04-05',contact:'',priority:'낮음'},
+    {id:6,text:'클라우드피크 데모 일정 잡기',done:false,due:'2026-03-28',contact:'정다은',priority:'높음'},
+  ],
+  activity:[
+    {text:'이지수 고객과 갱신 논의 통화 완료',time:'2시간 전',type:'통화',contact:'이지수'},
+    {text:'박민호에게 제안서 이메일 발송',time:'4시간 전',type:'이메일',contact:'박민호'},
+    {text:'"Q2 갱신" 딜이 검증 단계로 이동',time:'어제',type:'딜',contact:'최준혁'},
+    {text:'신규 연락처 김서연 추가',time:'2일 전',type:'연락처',contact:'김서연'},
+    {text:'클리어패스AI 계정에 메모 추가',time:'3일 전',type:'메모',contact:'최준혁'},
+    {text:'"엔터프라이즈 업그레이드" 딜 성사',time:'4일 전',type:'딜',contact:'이지수'},
+    {text:'오미래 고객과 온보딩 미팅',time:'5일 전',type:'미팅',contact:'오미래'},
+    {text:'퓨처랩 프리미엄 플랜 갱신 확인',time:'6일 전',type:'이메일',contact:'오미래'},
+  ],
+  nextId:8,
+  currentSection:'dashboard',
+  modalType:null,
+  editId:null,
+  taskFilter:'all'
+};
+
+function colorFor(id){const i=(id-1)%BG.length;return BG[i]}
+function initials(name){return name.slice(0,2)}
+function fmtWon(v){if(v>=100000000)return '₩'+(v/100000000).toFixed(1)+'억';if(v>=10000)return '₩'+(v/10000).toFixed(0)+'만';return '₩'+v}
+function today(){return new Date().toISOString().slice(0,10)}
+
+function navTo(section,el){
+  state.currentSection=section;
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(el)el.classList.add('active');
+  else{const map=['dashboard','contacts','pipeline','companies','tasks','reports','activity'];document.querySelectorAll('.nav-item')[map.indexOf(section)].classList.add('active')}
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sec-'+section).classList.add('active');
+  const titles={dashboard:'대시보드',contacts:'연락처',pipeline:'영업 파이프라인',companies:'기업 관리',tasks:'할 일 관리',reports:'리포트 & 분석',activity:'활동 로그'};
+  document.getElementById('page-title').textContent=titles[section]||section;
+  closeDetail();render();
+}
+
+function render(){
+  updateStats();
+  const s=state.currentSection;
+  if(s==='dashboard')renderDashboard();
+  if(s==='contacts')renderContacts();
+  if(s==='pipeline')renderPipeline();
+  if(s==='companies')renderCompanies();
+  if(s==='tasks')renderTasks();
+  if(s==='reports')renderReports();
+  if(s==='activity')renderActivity();
+  updateTaskBadge();
+}
+
+function updateStats(){
+  document.getElementById('s-contacts').textContent=state.contacts.length;
+  const open=state.deals.filter(d=>d.stage!=='성사');
+  const total=open.reduce((a,d)=>a+d.value,0);
+  document.getElementById('s-value').textContent=fmtWon(total);
+  document.getElementById('s-won').textContent=state.deals.filter(d=>d.stage==='성사').length;
+  const pending=state.tasks.filter(t=>!t.done).length;
+  document.getElementById('s-tasks').textContent=pending;
+}
+function updateTaskBadge(){
+  const n=state.tasks.filter(t=>!t.done).length;
+  document.getElementById('task-badge').textContent=n;
+  document.getElementById('s-tasks').textContent=n;
+}
+
+function renderDashboard(){
+  // bar chart
+  const max=Math.max(...MONTHLY_DATA);
+  document.getElementById('monthly-chart').innerHTML=MONTHS.map((m,i)=>{
+    const h=Math.round((MONTHLY_DATA[i]/max)*90);
+    return `<div class="bar-wrap">
+      <div class="bar-val" style="color:var(--accent);font-size:10px">${MONTHLY_DATA[i]}억</div>
+      <div class="bar" style="height:${h}px;background:${i===5?'var(--accent)':'var(--bg3)'}"></div>
+      <div class="bar-label">${m}</div>
+    </div>`;
+  }).join('');
+  // stage chart
+  const stageEl=document.getElementById('stage-chart');
+  stageEl.innerHTML=STAGES.map((s,i)=>{
+    const deals=state.deals.filter(d=>d.stage===s);
+    const val=deals.reduce((a,d)=>a+d.value,0);
+    const max2=Math.max(...STAGES.map(st=>state.deals.filter(d=>d.stage===st).reduce((a,d)=>a+d.value,0)));
+    const pct=max2?Math.round(val/max2*100):0;
+    return `<div class="prog-row">
+      <div class="prog-label" style="font-size:12px;color:var(--text2)">${s}</div>
+      <div class="prog-bar"><div class="prog-fill" style="width:${pct}%;background:${STAGE_COLORS[i]}"></div></div>
+      <div class="prog-pct">${deals.length}건</div>
+    </div>`;
+  }).join('');
+  // recent contacts
+  const recent=state.contacts.slice().reverse().slice(0,5);
+  document.getElementById('dash-contacts').innerHTML='<table><tbody>'+recent.map(c=>`
+    <tr onclick="showContact(${c.id})">
+      <td style="width:36px"><div class="init-circle" style="background:${colorFor(c.id)}22;color:${colorFor(c.id)}">${initials(c.name)}</div></td>
+      <td><div style="font-weight:600">${c.name}</div><div style="font-size:11px;color:var(--text3)">${c.company}</div></td>
+      <td><span class="badge ${STATUS_BADGE[c.status]}">${c.status}</span></td>
+      <td style="text-align:right;font-size:12px;color:var(--accent)">${c.score}점</td>
+    </tr>`).join('')+'</tbody></table>';
+  // activity
+  document.getElementById('dash-activity').innerHTML=state.activity.slice(0,5).map(a=>`
+    <div class="act-item">
+      <div class="act-icon" style="background:${ACT_COLORS[a.type]||'var(--bg3)'}">${ACT_ICONS[a.type]||'📌'}</div>
+      <div class="act-body"><div class="act-text">${a.text}</div><div class="act-meta">${a.time} · ${a.contact}</div></div>
+    </div>`).join('');
+}
+
+function renderContacts(){
+  const q=(document.getElementById('contact-search')||{value:''}).value.toLowerCase();
+  const f=(document.getElementById('contact-status')||{value:''}).value;
+  const sort=(document.getElementById('contact-sort')||{value:'name'}).value;
+  let list=state.contacts.filter(c=>(!q||c.name.includes(q)||c.email.includes(q)||c.company.includes(q))&&(!f||c.status===f));
+  if(sort==='name')list.sort((a,b)=>a.name.localeCompare(b.name));
+  else if(sort==='date')list.sort((a,b)=>b.lastContact.localeCompare(a.lastContact));
+  else if(sort==='company')list.sort((a,b)=>a.company.localeCompare(b.company));
+  document.getElementById('contacts-tbody').innerHTML=list.length?list.map(c=>`
+    <tr onclick="showContact(${c.id})">
+      <td><div style="display:flex;align-items:center;gap:10px">
+        <div class="init-circle" style="background:${colorFor(c.id)}22;color:${colorFor(c.id)}">${initials(c.name)}</div>
+        <div><div style="font-weight:600">${c.name}</div><div style="font-size:11px;color:var(--text3)">${c.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div></div>
+      </div></td>
+      <td>${c.company}</td>
+      <td style="color:var(--accent)">${c.email}</td>
+      <td style="color:var(--text2)">${c.phone}</td>
+      <td><span class="badge ${STATUS_BADGE[c.status]}">${c.status}</span></td>
+      <td style="color:var(--text3)">${c.lastContact}</td>
+      <td><div style="display:flex;align-items:center;gap:6px">
+        <div style="width:36px;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden"><div style="width:${c.score}%;height:4px;background:${c.score>80?'var(--accent3)':c.score>50?'var(--accent4)':'var(--accent5)'};border-radius:2px"></div></div>
+        <span style="font-size:11px;font-weight:700;color:${c.score>80?'var(--accent3)':c.score>50?'var(--accent4)':'var(--accent5)'}">${c.score}</span>
+      </div></td>
+    </tr>`).join(''):'<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:30px 0">검색 결과가 없습니다</td></tr>';
+}
+
+function renderPipeline(){
+  document.getElementById('pipeline-board').innerHTML=STAGES.map((stage,si)=>{
+    const deals=state.deals.filter(d=>d.stage===stage);
+    const val=deals.reduce((a,d)=>a+d.value,0);
+    return `<div class="p-col">
+      <div class="p-col-head"><span class="p-col-name">${stage}</span><span class="p-col-count">${deals.length}</span></div>
+      <div class="p-col-line" style="background:${STAGE_COLORS[si]}"></div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:10px">${fmtWon(val)}</div>
+      ${deals.map(d=>`<div class="deal-card" onclick="showDeal(${d.id})">
+        <div class="deal-name">${d.name}</div>
+        <div class="deal-co">${d.company}</div>
+        <div class="deal-val">${fmtWon(d.value)}</div>
+        <div class="deal-foot">
+          <div class="deal-prob">성사 확률 ${d.prob}%</div>
+          <span class="badge ${STAGE_BADGE[si]}" style="font-size:10px">${stage}</span>
+        </div>
+        <div class="deal-bar"><div class="deal-bar-fill" style="width:${d.prob}%;background:${STAGE_COLORS[si]}"></div></div>
+      </div>`).join('')}
+      ${!deals.length?'<div style="font-size:12px;color:var(--text3);text-align:center;padding:24px 0">딜 없음</div>':''}
+    </div>`;
+  }).join('');
+}
+
+function renderCompanies(){
+  const q=(document.getElementById('company-search')||{value:''}).value.toLowerCase();
+  const ind=(document.getElementById('company-industry')||{value:''}).value;
+  const list=state.companies.filter(c=>(!q||c.name.includes(q)||c.industry.includes(q))&&(!ind||c.industry===ind));
+  document.getElementById('companies-tbody').innerHTML=list.length?list.map(co=>{
+    const contacts=state.contacts.filter(c=>c.company===co.name).length;
+    const deals=state.deals.filter(d=>d.company===co.name);
+    const val=deals.reduce((a,d)=>a+d.value,0);
+    return `<tr onclick="showCompany(${co.id})">
+      <td><div style="display:flex;align-items:center;gap:10px">
+        <div class="init-circle" style="background:${colorFor(co.id)}22;color:${colorFor(co.id)};border-radius:8px">${co.name[0]}</div>
+        <div><div style="font-weight:600">${co.name}</div><div style="font-size:11px;color:var(--accent)">${co.website}</div></div>
+      </div></td>
+      <td><span class="badge b-blue">${co.industry}</span></td>
+      <td style="color:var(--text2)">${co.size}</td>
+      <td>${contacts}명</td>
+      <td>${deals.length}건</td>
+      <td style="font-weight:700;color:var(--accent3)">${fmtWon(val)}</td>
+      <td style="color:var(--text3)">${co.owner}</td>
+    </tr>`;
+  }).join(''):'<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:30px 0">검색 결과가 없습니다</td></tr>';
+}
+
+function filterTasks(f,el){
+  state.taskFilter=f;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  renderTasks();
+}
+
+function renderTasks(){
+  let list=state.tasks;
+  if(state.taskFilter==='today')list=list.filter(t=>t.due===today());
+  else if(state.taskFilter==='pending')list=list.filter(t=>!t.done);
+  else if(state.taskFilter==='done')list=list.filter(t=>t.done);
+  document.getElementById('task-list').innerHTML=list.length?list.map(t=>{
+    const overdue=!t.done&&t.due<today();
+    const prioColor=t.priority==='높음'?'var(--accent5)':t.priority==='보통'?'var(--accent4)':'var(--text3)';
+    return `<div class="task-item">
+      <div class="task-cb ${t.done?'done':''}" onclick="toggleTask(${t.id})">${t.done?'✓':''}</div>
+      <div style="flex:1">
+        <div class="task-text ${t.done?'done':''}">${t.text}</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:3px">${t.contact?'👤 '+t.contact+' · ':''}<span style="color:${prioColor}">${t.priority} 우선순위</span></div>
+      </div>
+      <div class="task-due ${overdue?'overdue':''}">${t.due}${overdue?' ⚠️':''}</div>
+      <div onclick="deleteTask(${t.id})" style="cursor:pointer;color:var(--text3);padding:4px 8px;font-size:16px;transition:color .15s" onmouseover="this.style.color='var(--accent5)'" onmouseout="this.style.color='var(--text3)'">×</div>
+    </div>`;
+  }).join(''):'<div style="text-align:center;padding:30px 0;color:var(--text3)">할 일이 없습니다 🎉</div>';
+}
+
+function toggleTask(id){
+  const t=state.tasks.find(x=>x.id===id);
+  if(t){t.done=!t.done;state.activity.unshift({text:`할 일 "${t.text.slice(0,20)}..." ${t.done?'완료':'미완료'}로 변경`,time:'방금',type:'할일',contact:t.contact});}
+  render();
+}
+function deleteTask(id){state.tasks=state.tasks.filter(x=>x.id!==id);render();}
+
+function renderReports(){
+  // industry chart
+  const industries=[...new Set(state.companies.map(c=>c.industry))];
+  const maxI=Math.max(...industries.map(ind=>state.deals.filter(d=>state.companies.find(c=>c.name===d.company&&c.industry===ind)).reduce((a,d)=>a+d.value,0)));
+  document.getElementById('industry-chart').innerHTML=industries.map((ind,i)=>{
+    const val=state.deals.filter(d=>state.companies.find(c=>c.name===d.company&&c.industry===ind)).reduce((a,d)=>a+d.value,0);
+    const pct=maxI?Math.round(val/maxI*100):0;
+    return `<div class="prog-row"><div class="prog-label">${ind}</div><div class="prog-bar"><div class="prog-fill" style="width:${pct}%;background:${BG[i%BG.length]}"></div></div><div class="prog-pct" style="color:var(--text2)">${fmtWon(val)}</div></div>`;
+  }).join('');
+  // rep chart
+  const reps=['김민준','이영희','박철수'];
+  const repData=[3,2,2];
+  const maxR=Math.max(...repData);
+  document.getElementById('rep-chart').innerHTML=reps.map((r,i)=>`
+    <div class="prog-row">
+      <div class="prog-label">${r}</div>
+      <div class="prog-bar"><div class="prog-fill" style="width:${Math.round(repData[i]/maxR*100)}%;background:${BG[i]}"></div></div>
+      <div class="prog-pct" style="color:var(--text2)">${repData[i]}건</div>
+    </div>`).join('');
+  // weekly chart
+  const weeks=['월','화','수','목','금','토','일'];
+  const wData=[1,3,2,4,2,1,0];
+  const maxW=Math.max(...wData);
+  document.getElementById('weekly-chart').innerHTML=weeks.map((w,i)=>{
+    const h=maxW?Math.round((wData[i]/maxW)*90):0;
+    return `<div class="bar-wrap">
+      <div class="bar-val">${wData[i]}</div>
+      <div class="bar" style="height:${Math.max(h,4)}px;background:${i===3?'var(--accent)':'var(--bg3)'}"></div>
+      <div class="bar-label">${w}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderActivity(){
+  const f=(document.getElementById('act-type')||{value:''}).value;
+  const list=state.activity.filter(a=>!f||a.type===f);
+  document.getElementById('all-activity').innerHTML=list.map(a=>`
+    <div class="act-item">
+      <div class="act-icon" style="background:${ACT_COLORS[a.type]||'var(--bg3)'};border-radius:50%">${ACT_ICONS[a.type]||'📌'}</div>
+      <div class="act-body">
+        <div class="act-text">${a.text}</div>
+        <div class="act-meta"><span class="act-tag" style="background:${ACT_COLORS[a.type]||'var(--bg3)'};">${a.type}</span>${a.time}${a.contact?' · '+a.contact:''}</div>
+      </div>
+    </div>`).join('');
+}
+
+function showContact(id){
+  const c=state.contacts.find(x=>x.id===id);if(!c)return;
+  const deals=state.deals.filter(d=>d.company===c.company);
+  document.getElementById('dp-top').innerHTML=`
+    <div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:8px 0">
+      <div class="init-circle" style="width:64px;height:64px;font-size:22px;background:${colorFor(c.id)}22;color:${colorFor(c.id)}">${initials(c.name)}</div>
+      <div class="dp-name">${c.name}</div>
+      <div class="dp-sub">${c.company} · <span class="badge ${STATUS_BADGE[c.status]}">${c.status}</span></div>
+      <div style="margin-top:6px">${c.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+    </div>`;
+  document.getElementById('detail-content').innerHTML=`
+    <div class="dp-section">
+      <div class="dp-section-title">연락처 정보</div>
+      <div class="dp-field"><span class="dp-field-label">이메일</span><span style="color:var(--accent)">${c.email}</span></div>
+      <div class="dp-field"><span class="dp-field-label">전화번호</span><span>${c.phone}</span></div>
+      <div class="dp-field"><span class="dp-field-label">최근 연락</span><span>${c.lastContact}</span></div>
+      <div class="dp-field"><span class="dp-field-label">리드 점수</span><span style="font-weight:700;color:${c.score>80?'var(--accent3)':c.score>50?'var(--accent4)':'var(--accent5)'}">${c.score}점</span></div>
+    </div>
+    <div class="dp-section">
+      <div class="dp-section-title">메모</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.6">${c.notes||'메모가 없습니다.'}</div>
+    </div>
+    ${deals.length?`<div class="dp-section"><div class="dp-section-title">관련 딜 (${deals.length}건)</div>${deals.map(d=>`<div class="dp-field"><span>${d.name}</span><span style="color:var(--accent);font-weight:700">${fmtWon(d.value)}</span></div>`).join('')}</div>`:''}`;
+  document.getElementById('dp-actions').innerHTML=`
+    <button class="btn" onclick="editContact(${c.id})" style="flex:1">✏️ 편집</button>
+    <button class="btn" onclick="deleteContact(${c.id})" style="flex:1;color:var(--accent5);border-color:var(--accent5)">🗑️ 삭제</button>`;
+  document.getElementById('detail-panel').classList.add('open');
+}
+
+function showDeal(id){
+  const d=state.deals.find(x=>x.id===id);if(!d)return;
+  const si=STAGES.indexOf(d.stage);
+  document.getElementById('dp-top').innerHTML=`
+    <div style="padding:8px 0">
+      <div class="dp-name">${d.name}</div>
+      <div class="dp-sub">${d.company} · <span class="badge ${STAGE_BADGE[si]}">${d.stage}</span></div>
+    </div>`;
+  document.getElementById('detail-content').innerHTML=`
+    <div class="dp-section">
+      <div class="dp-section-title">딜 정보</div>
+      <div class="dp-field"><span class="dp-field-label">담당 고객</span><span>${d.contact}</span></div>
+      <div class="dp-field"><span class="dp-field-label">기업</span><span>${d.company}</span></div>
+      <div class="dp-field"><span class="dp-field-label">계약 금액</span><span style="font-size:16px;font-weight:700;color:var(--accent3)">${fmtWon(d.value)}</span></div>
+      <div class="dp-field"><span class="dp-field-label">성사 확률</span><span>${d.prob}%</span></div>
+      <div class="dp-field"><span class="dp-field-label">예상 마감일</span><span>${d.closeDate}</span></div>
+    </div>
+    <div class="dp-section">
+      <div class="dp-section-title">단계 변경</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        ${STAGES.map((s,i)=>`<button class="btn" style="font-size:12px;padding:7px 8px;${s===d.stage?'border-color:'+STAGE_COLORS[i]+';color:'+STAGE_COLORS[i]+';':''}" onclick="moveStage(${d.id},'${s}')">${s}</button>`).join('')}
+      </div>
+    </div>`;
+  document.getElementById('dp-actions').innerHTML=`
+    <button class="btn" onclick="editDeal(${d.id})" style="flex:1">✏️ 편집</button>
+    <button class="btn" onclick="deleteDeal(${d.id})" style="flex:1;color:var(--accent5);border-color:var(--accent5)">🗑️ 삭제</button>`;
+  document.getElementById('detail-panel').classList.add('open');
+}
+
+function showCompany(id){
+  const co=state.companies.find(x=>x.id===id);if(!co)return;
+  const contacts=state.contacts.filter(c=>c.company===co.name);
+  const deals=state.deals.filter(d=>d.company===co.name);
+  const val=deals.reduce((a,d)=>a+d.value,0);
+  document.getElementById('dp-top').innerHTML=`
+    <div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:8px 0">
+      <div class="init-circle" style="width:64px;height:64px;font-size:24px;background:${colorFor(co.id)}22;color:${colorFor(co.id)};border-radius:16px">${co.name[0]}</div>
+      <div class="dp-name">${co.name}</div>
+      <div class="dp-sub"><span class="badge b-blue">${co.industry}</span> · ${co.size}</div>
+    </div>`;
+  document.getElementById('detail-content').innerHTML=`
+    <div class="dp-section">
+      <div class="dp-section-title">기업 정보</div>
+      <div class="dp-field"><span class="dp-field-label">웹사이트</span><span style="color:var(--accent)">${co.website}</span></div>
+      <div class="dp-field"><span class="dp-field-label">담당자</span><span>${co.owner}</span></div>
+      <div class="dp-field"><span class="dp-field-label">총 파이프라인</span><span style="font-weight:700;color:var(--accent3)">${fmtWon(val)}</span></div>
+    </div>
+    ${contacts.length?`<div class="dp-section"><div class="dp-section-title">연락처 (${contacts.length}명)</div>${contacts.map(c=>`<div class="dp-field"><span style="display:flex;align-items:center;gap:8px"><div class="init-circle" style="background:${colorFor(c.id)}22;color:${colorFor(c.id)};width:24px;height:24px;font-size:10px">${initials(c.name)}</div>${c.name}</span><span class="badge ${STATUS_BADGE[c.status]}">${c.status}</span></div>`).join('')}</div>`:''}
+    ${deals.length?`<div class="dp-section"><div class="dp-section-title">딜 (${deals.length}건)</div>${deals.map(d=>`<div class="dp-field"><span>${d.name}</span><span style="color:var(--accent);font-weight:700">${fmtWon(d.value)}</span></div>`).join('')}</div>`:''}`;
+  document.getElementById('dp-actions').innerHTML=`
+    <button class="btn" onclick="deleteCompany(${co.id})" style="flex:1;color:var(--accent5);border-color:var(--accent5)">🗑️ 삭제</button>`;
+  document.getElementById('detail-panel').classList.add('open');
+}
+
+function moveStage(id,stage){
+  const d=state.deals.find(x=>x.id===id);if(!d)return;
+  d.stage=stage;
+  const si=STAGES.indexOf(stage);
+  d.prob=[15,40,60,80,100][si];
+  state.activity.unshift({text:`"${d.name}" 딜이 ${stage} 단계로 이동`,time:'방금',type:'딜',contact:d.contact});
+  showDeal(id);render();
+}
+
+function closeDetail(){document.getElementById('detail-panel').classList.remove('open')}
+
+function openAddModal(type){
+  if(!type){const map={contacts:'contact',pipeline:'deal',companies:'company',tasks:'task',dashboard:'contact',reports:'contact',activity:'contact'};type=map[state.currentSection]||'contact';}
+  showModal(type,null);
+}
+
+function showModal(type,id){
+  state.modalType=type;state.editId=id;
+  let title,body;
+  if(type==='contact'){
+    const c=id?state.contacts.find(x=>x.id===id):{};
+    title=id?'연락처 편집':'새 연락처 추가';
+    body=`
+      <div class="form-row"><label class="form-label">이름 *</label><input class="form-input" id="m-name" value="${c.name||''}" placeholder="홍길동"/></div>
+      <div class="form-row"><label class="form-label">이메일</label><input class="form-input" id="m-email" value="${c.email||''}" placeholder="hong@example.com"/></div>
+      <div class="form-row"><label class="form-label">전화번호</label><input class="form-input" id="m-phone" value="${c.phone||''}" placeholder="010-0000-0000"/></div>
+      <div class="form-row"><label class="form-label">회사</label><input class="form-input" id="m-company" value="${c.company||''}" placeholder="(주)예시기업"/></div>
+      <div class="form-row"><label class="form-label">상태</label><select class="form-input" id="m-status">${['잠재고객','가망고객','고객','이탈'].map(s=>`<option ${(c.status||'잠재고객')===s?'selected':''}>${s}</option>`).join('')}</select></div>
+      <div class="form-row"><label class="form-label">리드 점수</label><input class="form-input" id="m-score" type="number" min="0" max="100" value="${c.score||50}" placeholder="0-100"/></div>
+      <div class="form-row full"><label class="form-label">메모</label><textarea class="form-input" id="m-notes">${c.notes||''}</textarea></div>`;
+  }else if(type==='deal'){
+    const d=id?state.deals.find(x=>x.id===id):{};
+    title=id?'딜 편집':'새 딜 추가';
+    body=`
+      <div class="form-row"><label class="form-label">딜 이름 *</label><input class="form-input" id="m-name" value="${d.name||''}" placeholder="엔터프라이즈 계약"/></div>
+      <div class="form-row"><label class="form-label">담당 고객</label><input class="form-input" id="m-contact" value="${d.contact||''}" placeholder="홍길동"/></div>
+      <div class="form-row"><label class="form-label">기업</label><input class="form-input" id="m-company" value="${d.company||''}" placeholder="(주)예시기업"/></div>
+      <div class="form-row"><label class="form-label">계약 금액 (원)</label><input class="form-input" id="m-value" type="number" value="${d.value||''}" placeholder="10000000"/></div>
+      <div class="form-row"><label class="form-label">단계</label><select class="form-input" id="m-stage">${STAGES.map(s=>`<option ${(d.stage||'잠재')===s?'selected':''}>${s}</option>`).join('')}</select></div>
+      <div class="form-row"><label class="form-label">성사 확률 (%)</label><input class="form-input" id="m-prob" type="number" min="0" max="100" value="${d.prob||20}"/></div>
+      <div class="form-row"><label class="form-label">예상 마감일</label><input class="form-input" id="m-close" type="date" value="${d.closeDate||''}"/></div>`;
+  }else if(type==='company'){
+    const co=id?state.companies.find(x=>x.id===id):{};
+    title=id?'기업 편집':'새 기업 추가';
+    body=`
+      <div class="form-row"><label class="form-label">기업명 *</label><input class="form-input" id="m-name" value="${co.name||''}" placeholder="(주)예시기업"/></div>
+      <div class="form-row"><label class="form-label">산업</label><select class="form-input" id="m-industry">${['SaaS','이커머스','제조업','금융','헬스케어','미디어','기타'].map(s=>`<option ${(co.industry||'SaaS')===s?'selected':''}>${s}</option>`).join('')}</select></div>
+      <div class="form-row"><label class="form-label">기업 규모</label><select class="form-input" id="m-size">${['스타트업','중소기업','중견기업','대기업'].map(s=>`<option ${(co.size||'중소기업')===s?'selected':''}>${s}</option>`).join('')}</select></div>
+      <div class="form-row"><label class="form-label">웹사이트</label><input class="form-input" id="m-website" value="${co.website||''}" placeholder="example.com"/></div>
+      <div class="form-row"><label class="form-label">담당 영업</label><input class="form-input" id="m-owner" value="${co.owner||''}" placeholder="김민준"/></div>`;
+  }else if(type==='task'){
+    title='할 일 추가';
+    body=`
+      <div class="form-row full"><label class="form-label">할 일 내용 *</label><input class="form-input" id="m-name" placeholder="미팅 준비, 이메일 발송 등..."/></div>
+      <div class="form-row"><label class="form-label">마감일</label><input class="form-input" id="m-due" type="date" value="${today()}"/></div>
+      <div class="form-row"><label class="form-label">우선순위</label><select class="form-input" id="m-priority"><option>높음</option><option selected>보통</option><option>낮음</option></select></div>
+      <div class="form-row full"><label class="form-label">관련 고객</label><input class="form-input" id="m-contact" placeholder="홍길동 (선택사항)"/></div>`;
+  }
+  document.getElementById('modal-title').textContent=title;
+  document.getElementById('modal-body').innerHTML=body;
+  document.getElementById('modal-wrap').classList.add('show');
+  setTimeout(()=>{const f=document.getElementById('m-name');if(f)f.focus();},80);
+}
+
+function editContact(id){closeDetail();showModal('contact',id)}
+function editDeal(id){closeDetail();showModal('deal',id)}
+
+function saveModal(){
+  const v=id=>{const el=document.getElementById(id);return el?el.value.trim():''};
+  const type=state.modalType,id=state.editId;
+  if(type==='contact'){
+    const name=v('m-name');if(!name){alert('이름을 입력하세요.');return}
+    const data={name,email:v('m-email'),phone:v('m-phone'),company:v('m-company'),status:v('m-status'),score:parseInt(v('m-score'))||50,notes:v('m-notes'),tags:[]};
+    if(id){Object.assign(state.contacts.find(x=>x.id===id),data);state.activity.unshift({text:`"${name}" 연락처 정보 수정`,time:'방금',type:'연락처',contact:name})}
+    else{state.contacts.push({id:state.nextId++,lastContact:today(),...data});state.activity.unshift({text:`새 연락처 "${name}" 추가`,time:'방금',type:'연락처',contact:name})}
+  }else if(type==='deal'){
+    const name=v('m-name');if(!name){alert('딜 이름을 입력하세요.');return}
+    const data={name,contact:v('m-contact'),company:v('m-company'),value:parseInt(v('m-value'))||0,stage:v('m-stage'),prob:parseInt(v('m-prob'))||20,closeDate:v('m-close')};
+    if(id){Object.assign(state.deals.find(x=>x.id===id),data);state.activity.unshift({text:`"${name}" 딜 정보 수정`,time:'방금',type:'딜',contact:data.contact})}
+    else{state.deals.push({id:state.nextId++,...data});state.activity.unshift({text:`새 딜 "${name}" 생성`,time:'방금',type:'딜',contact:data.contact})}
+  }else if(type==='company'){
+    const name=v('m-name');if(!name){alert('기업명을 입력하세요.');return}
+    if(!id){state.companies.push({id:state.nextId++,name,industry:v('m-industry'),size:v('m-size'),website:v('m-website'),owner:v('m-owner')});state.activity.unshift({text:`새 기업 "${name}" 추가`,time:'방금',type:'기업',contact:''})}
+  }else if(type==='task'){
+    const text=v('m-name');if(!text){alert('할 일 내용을 입력하세요.');return}
+    state.tasks.unshift({id:state.nextId++,text,done:false,due:v('m-due'),contact:v('m-contact'),priority:v('m-priority')});
+    state.activity.unshift({text:`새 할 일 추가: "${text.slice(0,20)}"`,time:'방금',type:'할일',contact:v('m-contact')});
+  }
+  closeModal();render();
+}
+
+function deleteContact(id){if(!confirm('이 연락처를 삭제하시겠습니까?'))return;state.contacts=state.contacts.filter(x=>x.id!==id);closeDetail();render()}
+function deleteDeal(id){if(!confirm('이 딜을 삭제하시겠습니까?'))return;state.deals=state.deals.filter(x=>x.id!==id);closeDetail();render()}
+function deleteCompany(id){if(!confirm('이 기업을 삭제하시겠습니까?'))return;state.companies=state.companies.filter(x=>x.id!==id);closeDetail();render()}
+
+function globalSearch(q){
+  if(!q)return;
+  const lower=q;
+  const c=state.contacts.find(x=>x.name.includes(lower)||x.email.includes(lower)||x.company.includes(lower));
+  if(c){navTo('contacts');setTimeout(()=>showContact(c.id),60)}
+  else{const d=state.deals.find(x=>x.name.includes(lower));if(d){navTo('pipeline');setTimeout(()=>showDeal(d.id),60)}}
+}
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeDetail()}});
+render();
+</script>
+</body>
+</html>
